@@ -330,6 +330,28 @@ el_2m %>% saveRDS(paste0('../temp/el_2m_', str_to_lower(var_inst), '_', str_to_l
 
 rm(m_2m, g_2m, el_2m, C_nw)
 
+###########################################################################################
+########################### Local citations
+########################################################################################### 
+
+print('Starting: Further Analysis')
+
+CR <- M %>% citations(sep = ";")
+CR %>% saveRDS(paste0('../temp/CR_', str_to_lower(var_inst), '_', str_to_lower(var_dept), '.rds'))
+
+#CRL <- M %>% localCitations(sep = ";") # For some reason takes forever...
+#CRL %>% saveRDS(paste0('../temp/CRL_', str_to_lower(var_inst), '_', str_to_lower(var_dept), '.rds'))
+
+rm(CR)
+
+###########################################################################################
+############################ Threefield Plot
+########################################################################################### 
+
+M_threefield <- M %>% as.data.frame() %>% threeFieldsPlot(fields = c("AU_UN", "DE", "CR_SO"), n = c(20, 10, 10))
+M_threefield %>% saveRDS(paste0('../temp/threefield_', str_to_lower(var_inst), '_', str_to_lower(var_dept), '.rds'))
+rm(M_threefield)
+
 
 ###########################################################################################
 ########################### NLP - Research Areas
@@ -519,24 +541,4 @@ promt_top
 #                               top_n = 10,
 #                               model_version = "gpt-4")
 
-###########################################################################################
-########################### Local citations
-########################################################################################### 
 
-print('Starting: Further Analysis')
-
-CR <- M %>% citations(sep = ";")
-CR %>% saveRDS(paste0('../temp/CR_', str_to_lower(var_inst), '_', str_to_lower(var_dept), '.rds'))
-
-#CRL <- M %>% localCitations(sep = ";") # For some reason takes forever...
-#CRL %>% saveRDS(paste0('../temp/CRL_', str_to_lower(var_inst), '_', str_to_lower(var_dept), '.rds'))
-
-rm(CR)
-
-###########################################################################################
-############################ Threefield Plot
-########################################################################################### 
-
-M_threefield <- M %>% as.data.frame() %>% threeFieldsPlot(fields = c("AU_UN", "DE", "CR_SO"), n = c(20, 10, 10))
-M_threefield %>% saveRDS(paste0('../temp/threefield_', str_to_lower(var_inst), '_', str_to_lower(var_dept), '.rds'))
-rm(M_threefield)
