@@ -32,7 +32,7 @@ source("functions/functions_basic.R")
 source("keys.R")
 
 # institute and department
-var_inst <- 'AI'
+var_inst <- 'TT'
 var_dept <- 'v1'
 
 # openaikey
@@ -381,33 +381,36 @@ M_bib %>% count(com)
 top_n_bib = 10
 
 promt_intro = 
-"You are a knowledgable and helpful researcher in social science. I want you to summarize the research in the following documents."
+"You are a knowledgable, helpful, and truthful academic researcher. I want you to summarize the research in a broader scientific field."
 
-promt_context = "I will provide you text with titles plus abstacts of scientific journal article publications. They are representative articles for broader research themes to be identified. 
-They are supposed to be similar in terms of theoretical foundations, literature they relate to, context or topic of research. Therefore, they all should be interpreted in relation to this overal theme."
+promt_context = "I will provide yo uinformation on scientific journal article publications. 
+They are all from the broad field of study is related to twin transitions, meaning they transition of industries and economies towards both higher degrees of digitalization and sustainability jointly.
+They are representative articles for particular research themes within or related to this field of study.
+"
 
 ### 
 
 promt_bib_intro = 
-  "I will provide you text with titles plus abstacts of scientific journal article publications. They are representative articles for broader research themes to be identified. 
-They are supposed to be similar in terms of theoretical foundations, literature they relate to, context or topic of research."
+  "I will provide you text with titles plus abstacts of these publications. They have high bibliographic coupling with each others, meaning they share many common references.
+So, they are supposed to be similar in terms of theoretical foundations, literature they relate to, type method or context of research. 
+They all should be interpreted against the background of the overal field of study. If possible, they should relate to it."
 
 promt_bib_instruction = 
-  "Your task is to summarize the topic overal research based on the provided article text by a short label of 2-5 words, plus a short description of 3-5 sentences. 
+  "Your task is to summarize the topic overal research based on the provided article text by  a short label of 2-5 words, plus a short description of maximum three to five sentences. 
 The label optimally relates to relvevant scientific concepts in the field of study, and maybe the context it is studied.
 Only create a single label and description summarizing the overarching research theme in the documents.
-The description should be in light of the overal context, brief, focussed, clear, and avoid redundancies. This summary should highlight the commonality of the documents. 
-It should indicate the main theoretical theme, research framework applied, context, potential contributions and implications for theory, policy, and professionals."
+The description should be brief, focussed, clear, truthful, and avoid redundancies. This summary should highlight the commonality of the documents, rather than solely focus on  particular documents in isolation.
+It should indicate the main theoretical theme, research framework applied, context, and if available also potential contributions and implications for theory, policy, and professionals."
 # You response should have the following format: <label> | <description>" 
 
 promt_docs_bib = paste("I will now provide the", top_n_bib, "documents. Every document starts with an '-', and ends with a linebreak.", sep = " ")
 
 promt_bib_doc <- df_text %>% 
-  filter(com == 3) %>%
+  filter(com == 6) %>%
   slice_max(order_by = dgr_int, n = top_n_bib) %>%
   pull(text) %>% paste('-', ., sep = ' ', collapse = ' \n ')
 
-promt_bib <- paste(promt_bib_intro, promt_context, promt_bib_instruction, promt_docs_bib, promt_bib_doc, sep = ' \n \n ') # 
+promt_bib <- paste(promt_intro, promt_context, promt_bib_intro,  promt_bib_instruction, promt_docs_bib, promt_bib_doc, sep = ' \n \n ') # 
 promt_bib
 
 desc_bib <- create_chat_completion(
@@ -437,26 +440,27 @@ C_nw %>% count(com)
 top_n_cit = 50
 
 promt_cit_intro = 
-  "I will provide you are titles of scientific journal article publications in the following format: Author, Publication title (Publication year). 
-They are representative articles for broader stream of literature to be identified. 
-the articles are references which are often cited together (co-citation), therefore often represent seminal articles of a research field."
+"I will provide you are titles of scientific journal article publications in the following format: Author, Publication title (Publication year). 
+The articles are references which are often cited together (co-citation), therefore often represent seminal articles of a field of study.
+They all should be interpreted against the background of the overal field of study. If possible, they should relate to it."
 
 promt_cit_instruction = 
-  "Your task is to summarize the topic of overal research based on the provided article text by a short label of 2-5 words, plus a short description of 3-5 sentences. 
+"Your task is to summarize the topic overal research based on the provided article text by  a short label of 2-5 words, plus a short description of maximum three to five sentences. 
 The label optimally relates to relvevant scientific concepts in the field of study, and maybe the context it is studied.
 Only create a single label and description summarizing the overarching research theme in the documents.
-The description should be in light of the overal context, brief, focussed, clear, and avoid redundancies. This summary should highlight the commonality of the documents. 
+The description should be brief, focussed, clear, truthful, and avoid redundancies. 
+This summary should highlight the commonality of the documents, rather than solely focus on  particular documents in isolation.
 It should indicate the main theoretical theme, research framework applied. and main arguments made."
 # You response should have the following format: <label> | <description>" 
 
 promt_docs_cit = paste("I will now provide the", top_n_cit, "documents. Every document starts with an '-', and ends with a linebreak.", sep = " ")
 
 promt_cit_doc <- C_nw %>% 
-  filter(com == 6) %>%
+  filter(com == 5) %>%
   slice_max(order_by = dgr_int, n = top_n_cit) %>%
   pull(name) %>% paste('-', ., sep = ' ', collapse = ' \n ')
 
-promt_cit <- paste(promt_cit_intro, promt_context, promt_cit_instruction, promt_docs_cit, promt_cit_doc, sep = ' \n \n ') # 
+promt_cit <- paste(promt_intro, promt_context, promt_cit_intro, promt_cit_instruction, promt_docs_cit, promt_cit_doc, sep = ' \n \n ') # 
 promt_cit
 
 desc_cit <- create_chat_completion(
@@ -506,26 +510,28 @@ M_top %>% count(com)
 top_n_top = 10
 
 promt_top_intro = 
-  "I will provide you text with titles plus abstacts of scientific journal article publications. They are representative articles for broader research topic to be identified. 
-They are supposed to be similar in terms of theoretical foundations, literature they relate to, context or topic of research."
+"I will provide you text with titles plus abstacts of scientific journal article publications. 
+The articles are sharing the same main topic, as identified by a topic modelling analysis. Therefore, they are supposed to be similar in teremes of main themes or context.
+They all should be interpreted against the background of the overal field of study. If possible, they should relate to it.."
 
 promt_top_instruction = 
-  "Your task is to summarize the topic overal research based on the provided article text by a short label of 2-5 words, plus a short description of 3-5 sentences. 
+  "Your task is to summarize the topic overal research based on the provided article text by  a short label of 2-5 words, plus a short description of maximum three to five sentences. 
 The label optimally relates to relvevant scientific concepts in the field of study, and maybe the context it is studied.
 Only create a single label and description summarizing the overarching research theme in the documents.
-The description should be in light of the overal context, brief, focussed, clear, and avoid redundancies. This summary should highlight the commonality of the documents. 
-It should indicate the main theoretical theme, research framework applied, context, potential contributions and implications for theory, policy, and professionals.
-You response should have the following format: <label> | <description>" 
-#
+The description should be brief, focussed, clear, truthful, and avoid redundancies. 
+This summary should highlight the commonality of the documents, rather than solely focus on  particular documents in isolation.
+It should indicate the main research theme, context, and main arguments made."
+# You response should have the following format: <label> | <description>" 
+
 
 promt_docs_top = paste("I will now provide the", top_n_top, "documents. Every document starts with an '-', and ends with a linebreak.", sep = " ")
 
 promt_top_doc <- df_text_top %>% 
-  filter(com == 3) %>%
+  filter(com == 2) %>%
   slice_max(order_by = weight, n = top_n_top, with_ties = FALSE) %>%
   pull(text) %>% paste('-', ., sep = ' ', collapse = ' \n ')
 
-promt_top <- paste(promt_top_intro, promt_context, promt_top_instruction, promt_docs_top, promt_top_doc, sep = ' \n \n ') # 
+promt_top <- paste(promt_intro, promt_context, promt_top_intro, promt_top_instruction, promt_docs_top, promt_top_doc, sep = ' \n \n ') # 
 promt_top
 
 # # TODO: TRYOUT THIS FUINCTION FOR AUTOMATIOZATION

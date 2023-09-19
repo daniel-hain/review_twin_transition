@@ -106,9 +106,9 @@ knitr::opts_chunk$set(echo = FALSE,
 
 ```{r, include=FALSE}
 # When doing it here in the notebook
-var_inst <- 'AI'
+var_inst <- 'TT'
 var_dept <- 'v1'
-var_label <- 'AI, industry and innovation dynamics'
+var_label <- 'Twin Transitions (Digital & Sustainable)'
 
 # When calling from a highert level script
 #var_inst <- params$institute
