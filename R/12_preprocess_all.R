@@ -383,9 +383,8 @@ top_n_bib = 10
 promt_intro = 
 "You are a knowledgable and helpful researcher in social science. I want you to summarize the research in the following documents."
 
-promt_context = "All the documents are more or less strongly related to and cover diverent aspects of research on the impact of 
-artificial intelligence on industry dynbamics and innovation.
-Therefore, they all should be interpreted in relation to this overal theme."
+promt_context = "I will provide you text with titles plus abstacts of scientific journal article publications. They are representative articles for broader research themes to be identified. 
+They are supposed to be similar in terms of theoretical foundations, literature they relate to, context or topic of research. Therefore, they all should be interpreted in relation to this overal theme."
 
 ### 
 
@@ -404,7 +403,7 @@ It should indicate the main theoretical theme, research framework applied, conte
 promt_docs_bib = paste("I will now provide the", top_n_bib, "documents. Every document starts with an '-', and ends with a linebreak.", sep = " ")
 
 promt_bib_doc <- df_text %>% 
-  filter(com == 6) %>%
+  filter(com == 3) %>%
   slice_max(order_by = dgr_int, n = top_n_bib) %>%
   pull(text) %>% paste('-', ., sep = ' ', collapse = ' \n ')
 
